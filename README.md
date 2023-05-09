@@ -11,18 +11,24 @@ Only the drivers for COMEDI USB devices are compiled in particular [USB-DUX](htt
 
 ```
 sudo apt install raspberrypi-kernel-headers
-make -C /usr/src/linux-headers-5.15.84-v8+/ M=$PWD
+make KDIR=/usr/src/linux-headers-5.15.84-v8+
 ```
 The above kernel header directory in `/usr/src` might differ depending if it's 64bit or 32bit.
 Please check with `ls -l /usr/src`.
 
+If `KDIR` is omitted, it will default to
+``/lib/modules/`uname -r`/build`` which is a symbolic link to the kernel
+header directory for the currently running kernel.
+
 ## Install
 
 ```
-sudo make -C /usr/src/linux-headers-5.15.84-v8+/ M=$PWD modules_install
+sudo make KDIR=/usr/src/linux-headers-5.15.84-v8+ install
 sudo depmod -a
 sudo apt install firmware-linux-free
 ```
+
+NOTE: Use the same `KDIR` value for both compiling and installing!
 
 Edit `/etc/group` and add yourself to the group `iocard`.
 
